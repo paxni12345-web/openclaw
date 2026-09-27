@@ -11,7 +11,12 @@
 ARG OPENCLAW_EXTENSIONS=""
 ARG OPENCLAW_BUNDLED_PLUGIN_DIR=extensions
 ARG OPENCLAW_DOCKER_BUILD_NODE_OPTIONS="--max-old-space-size=8192"
-ARG OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=""
+# Render's default (Starter) build pipeline runs builds on 2 CPU / 8 GB and does not
+# expose the memory cgroup limit inside the build container, so scripts/tsdown-build.mts
+# treats the host as unknown and aborts before building ("the process memory limit is not
+# visible through this cgroup mount namespace"). Pin the measured minimum heap that
+# completes a full build (MEASURED_MIN_TSDOWN_HEAP_MB) so Docker builds stop guessing.
+ARG OPENCLAW_DOCKER_BUILD_TSDOWN_MAX_OLD_SPACE_MB=4352
 ARG OPENCLAW_DOCKER_BUILD_SKIP_DTS=1
 ARG OPENCLAW_NODE_BOOKWORM_IMAGE="docker.io/library/node:24-bookworm@sha256:be23f54a88d34e8824c741b19b91064094f92c1c97b194144bfc8b50d67258e2"
 ARG OPENCLAW_NODE_BOOKWORM_SLIM_IMAGE="docker.io/library/node:24-bookworm-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e"
